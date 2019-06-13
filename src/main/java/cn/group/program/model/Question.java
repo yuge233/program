@@ -10,5 +10,6 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-
+    @Column(name = "answer")
+    String answer;
 }
