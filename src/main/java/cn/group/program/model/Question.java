@@ -8,8 +8,8 @@ public class Question {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(name = "answer")
-    String answer;
+    private String answer;
 }
