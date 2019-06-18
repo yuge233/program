@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>单人游戏</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+    <input type="hidden" th:value="${question.getAnswer()}" id="answer">
+    <input type="text" id="reply" name="reply">
+    <button id="submit">提交</button>
+    <div>游戏用时:<span id="timer">0</span></div>
+    <div id="result"></div>
+<script>
+    $(document).ready(function () {
+        var time = 0;
+        var timeout = setInterval(add, 1000);  //开始计时
+
+        function add() {
+            time++;
+            $("#timer").text(time);
+        }
+
+        var answer= $('#answer').val(); //获取结果
+        $('#submit').click(function () {
+            var reply=$('#reply').val();
+            if (reply==""){
+                $('#result').text("回答不能为空!");
+            } else if (reply==answer){
+                clearInterval(timeout);
+                $('#reply').attr("disabled","disabled");
+                $('#result').text("回答正确!");
+            } else{
+                $('#result').text("回答错误,请重试!");
+            }
+        });
+    });
+</script>
+</body>
+</html>

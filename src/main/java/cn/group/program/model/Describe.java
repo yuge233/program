@@ -14,8 +14,8 @@ public class Describe implements Serializable {
     @Column(name = "token")
     private String token;
 
-    @ManyToOne
-    private Question question;
+    @Column(name = "own")
+    private Long own;
 
     public Long getId() {
         return id;
@@ -33,11 +33,11 @@ public class Describe implements Serializable {
         this.token = token;
     }
 
-    public Question getQuestion() {
-        return question;
+    public Long getOwn() {
+        return own;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
+    public void setOwn(Long own) {
+        this.own = own;
     }
 }

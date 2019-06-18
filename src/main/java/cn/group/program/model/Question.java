@@ -16,9 +16,6 @@ public class Question implements Serializable {
     @Column(name = "answer")
     private String answer;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "question")
-    private Collection<Describe> describes;
-
     public Long getId() {
         return id;
     }
@@ -33,13 +30,5 @@ public class Question implements Serializable {
 
     public void setAnswer(String answer) {
         this.answer = answer;
-    }
-
-    public Collection<Describe> getDescribes() {
-        return describes;
-    }
-
-    public void setDescribes(Collection<Describe> describes) {
-        this.describes = describes;
     }
 }
