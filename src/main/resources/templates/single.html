@@ -6,23 +6,37 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
+    <input type="hidden" th:value="${describes.size()}" id="size">
     <input type="hidden" th:value="${question.getAnswer()}" id="answer">
     <input type="text" id="reply" name="reply">
     <button id="submit">提交</button>
     <div>游戏用时:<span id="timer">0</span></div>
     <div id="result"></div>
+    <table>
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>提示</th>
+            </tr>
+        </thead>
+        <tbody th:each="describe:${describes}">
+            <tr th:id="'td_'+${describeStat.count}" style="display: none">
+                <td th:text="${describeStat.count}" >1</td>
+                <td th:text="${describe.getToken()}">水果</td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="end">每五秒显示下一提示</div>
 <script>
     $(document).ready(function () {
         var time = 0;
-        var timeout = setInterval(add, 1000);  //开始计时
-
-        function add() {
+        var timeout = setInterval(function () {
             time++;
             $("#timer").text(time);
-        }
+        }, 1000);  //开始计时
 
         var answer= $('#answer').val(); //获取结果
-        $('#submit').click(function () {
+        $('#submit').click(function () {    //结果认证
             var reply=$('#reply').val();
             if (reply==""){
                 $('#result').text("回答不能为空!");
@@ -34,6 +48,23 @@
                 $('#result').text("回答错误,请重试!");
             }
         });
+
+        var size=$('#size').val();  //获取描述数组长度
+        var current=1;
+        $('#td_'+current).fadeIn(1000);
+        current++;
+
+        function run() {
+            if (current <= size) {
+                if (current == size){
+                    $('#end').text("提示结束.请回答");
+                }
+                $('#td_'+current).fadeIn(1000);
+                setTimeout(run,5000);
+                current++;
+            }
+        }
+        setTimeout(run,5000);
     });
 </script>
 </body>
