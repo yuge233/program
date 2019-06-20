@@ -6,6 +6,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
+    <!--隐藏表单存储后台数据-->
     <input type="hidden" th:value="${describes.size()}" id="size">
     <input type="hidden" th:value="${question.getAnswer()}" id="answer">
     <input type="text" id="reply" name="reply">
@@ -27,7 +28,12 @@
         </tbody>
     </table>
     <div id="end">每五秒显示下一提示</div>
-<script>
+    <div>
+        <a th:href="@{'/single/'+${question.getId()-1}}" style="display: none" class="button"><button th:if="${question.getId()} gt 1">上一题</button></a>
+        <a th:href="@{/}" style="display: none" class="button"><button>首页</button></a>
+        <a th:href="@{'/single/'+${question.getId()+1}}" style="display: none" class="button"><button th:if="${question.getId()} lt ${count}">下一题</button></a>
+    </div>
+<script th:inline="javascript">
     $(document).ready(function () {
         var time = 0;
         var timeout = setInterval(function () {
@@ -54,17 +60,19 @@
         $('#td_'+current).fadeIn(1000);
         current++;
 
-        function run() {
+        function run() {    //提示显示
             if (current <= size) {
+                $('#td_'+current).fadeIn(1000);
                 if (current == size){
                     $('#end').text("提示结束.请回答");
+                    $('.button').fadeIn(1000);
                 }
-                $('#td_'+current).fadeIn(1000);
                 setTimeout(run,5000);
                 current++;
             }
         }
         setTimeout(run,5000);
+
     });
 </script>
 </body>
