@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>多人游戏</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<div id="text_chat" style="display: none">
+    <div>当前房间:<span id="room_name"></span></div>
+    <div>当前用户:<span id="user_name"></span></div>
+    <textarea id="text_chat_content" readonly="readonly" cols="50" rows="15">
+    </textarea>
+    <div>输入框:<input id="in_message" value=""/><button id="btn_send">发送</button></div>
+</div>
+<div id="enter">
+    <div id="room">房间名:<input id="in_room" value=""/></div>
+    <div id="user">用户:<input id="in_username" value=""/></div>
+    <div>
+        <button id="btn_create">创建房间</button>
+        <button id="btn_join">加入房间</button>
+    </div>
+</div>
+<button id="btn_exit" style="display: none">离开房间</button>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var urlPrefix='ws://localhost:8080/many';
+        var ws=null;
+        var room;
+        var username;
+
+        $('#btn_create').click(function () {  //创建房间点击事件
+            if ($('#in_room').val() == "") {
+                alert("房间名不能为空");
+                return;
+            }
+            if ($('#in_username').val() == "") {
+                alert("用户名不能为空");
+                return;
+            }
+
+            $('#enter').hide();
+            $('#text_chat').show();
+            $('#btn_exit').show();
+
+            room=$('#in_room').val();
+            $('#room_name').text(room);
+
+            username=$('#in_username').val();
+            $('#user_name').text(username);
+
+            var url=urlPrefix+'/'+room+'/'+username;
+            ws=new WebSocket(url);
+
+            ws.onopen=function (event) {
+            };
+
+            ws.onmessage=function (event) { //监听消息
+                //服务端发送的消息
+                $('#text_chat_content').append(event.data+'\n');
+            };
+
+            ws.onclose=function (event) {
+            };
+        });
+
+        $('#btn_join').click(function () {  //加入房间点击事件
+            if ($('#in_room').val() == "") {
+                alert("房间名不能为空");
+                return;
+            }
+            if ($('#in_username').val() == "") {
+                alert("用户名不能为空");
+                return;
+            }
+
+            $('#enter').hide();
+            $('#text_chat').show();
+            $('#btn_exit').show();
+
+            room=$('#in_room').val();
+            $('#room_name').text(room);
+
+            username=$('#in_username').val();
+            $('#user_name').text(username);
+
+            var url=urlPrefix+'/'+room+'/'+username;
+            ws=new WebSocket(url);
+
+            ws.onopen=function (event) {
+            };
+
+            ws.onmessage=function (event) { //监听消息
+                //服务端发送的消息
+                $('#text_chat_content').append(event.data+'\n');
+            };
+
+            ws.onclose=function (event) {
+            };
+        });
+
+        //客户端发送消息到服务器
+        $('#btn_send').click(function () {
+            var message='['+username+']:'+$('#in_message').val();
+            if (ws){
+                ws.send(message);
+            }
+        });
+
+        //离开聊天室
+        $('#btn_exit').click(function () {
+            $('#enter').show();
+            $('#text_chat').hide();
+            $('#btn_exit').hide();
+
+            if (ws){
+                ws.close();
+            }
+        });
+
+    })
+</script>
+</body>
+</html>
