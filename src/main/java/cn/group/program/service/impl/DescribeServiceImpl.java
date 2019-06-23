@@ -17,7 +17,6 @@ public class DescribeServiceImpl implements DescribeService {
         return repository.findByOwn(own);
     }
 
-    @Override
     public void save(Describe describe) {
         Describe describe1=repository.save(describe);
         System.out.println(describe.getId());

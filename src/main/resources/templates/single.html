@@ -71,8 +71,12 @@
                 current++;
             }
         }
-        setTimeout(run,5000);
-
+        if(current > size) {
+            $('#end').text("提示结束.请回答");
+            $('.button').fadeIn(1000);
+        }else {
+            setTimeout(run,5000);
+        }
     });
 </script>
 </body>
