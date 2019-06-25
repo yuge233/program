@@ -67,7 +67,8 @@ public class ManyController {
         String username=params.get("username");
         String room=params.get("room");
         Vector<String> users=rooms.get(room);
-        users.remove(username);
+        if (username!=null)
+            users.remove(username);
         if (users.isEmpty()){
             rooms.remove(room);
         }
