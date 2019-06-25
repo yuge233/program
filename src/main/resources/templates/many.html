@@ -31,7 +31,8 @@
         var room;
         var username;
 
-        $('#btn_create').click(function () {  //创建房间点击事件
+        //创建房间点击事件
+        $('#btn_create').click(function () {
             if ($('#in_room').val() == "") {
                 alert("房间名不能为空");
                 return;
@@ -41,14 +42,41 @@
                 return;
             }
 
+            room=$('#in_room').val();
+            username=$('#in_username').val();
+
+            var ajax={
+                'username':username,
+                'room':room
+            };
+            var result=true;
+
+            $.ajax({
+                url:'/create.ajax',
+                type:'post',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async:false,
+                data:JSON.stringify(ajax),
+                success:function (data) {
+                    if (data.result != "success") {
+                        result=false;
+                        alert(data.result);
+                    }
+                },
+                fail:function () {
+                }
+            });
+
+            if (!result) {
+                return;
+            }
+
             $('#enter').hide();
             $('#text_chat').show();
             $('#btn_exit').show();
 
-            room=$('#in_room').val();
             $('#room_name').text(room);
-
-            username=$('#in_username').val();
             $('#user_name').text(username);
 
             var url=urlPrefix+'/'+room+'/'+username;
@@ -66,7 +94,8 @@
             };
         });
 
-        $('#btn_join').click(function () {  //加入房间点击事件
+        //加入房间点击事件
+        $('#btn_join').click(function () {
             if ($('#in_room').val() == "") {
                 alert("房间名不能为空");
                 return;
@@ -76,14 +105,41 @@
                 return;
             }
 
+            room=$('#in_room').val();
+            username=$('#in_username').val();
+
+            var ajax={
+                'username':username,
+                'room':room
+            };
+            var result=true;
+
+            $.ajax({
+                url:'/join.ajax',
+                type:'post',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async:false,
+                data:JSON.stringify(ajax),
+                success:function (data) {
+                    if (data.result != "success") {
+                        result=false;
+                        alert(data.result);
+                    }
+                },
+                fail:function () {
+                }
+            });
+
+            if (!result) {
+                return;
+            }
+
             $('#enter').hide();
             $('#text_chat').show();
             $('#btn_exit').show();
 
-            room=$('#in_room').val();
             $('#room_name').text(room);
-
-            username=$('#in_username').val();
             $('#user_name').text(username);
 
             var url=urlPrefix+'/'+room+'/'+username;
@@ -111,6 +167,15 @@
 
         //离开聊天室
         $('#btn_exit').click(function () {
+            $.ajax({
+                url:'/exit.ajax',
+                type:'post',
+                async:false,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data:JSON.stringify(ajax)
+            });
+
             $('#enter').show();
             $('#text_chat').hide();
             $('#btn_exit').hide();
@@ -120,7 +185,27 @@
             }
         });
 
-    })
+        window.onbeforeunload=function (event) {
+            return "确认离开房间?";
+        };
+
+        //页面离开事件
+        window.onunload=function (event) {
+            var ajax={
+                'username':username,
+                'room':room
+            };
+
+            $.ajax({
+            url:'/exit.ajax',
+            type:'post',
+            async:false,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data:JSON.stringify(ajax)
+            });
+        };
+    });
 </script>
 </body>
 </html>

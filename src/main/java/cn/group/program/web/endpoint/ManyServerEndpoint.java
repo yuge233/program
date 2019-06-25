@@ -48,11 +48,11 @@ public class ManyServerEndpoint {
 
     @OnClose
     public void close(@PathParam("room") String room, @PathParam("username") String username, Session session){
+        sendTextAll(room,"["+username+"]离开了聊天室!");
         Map<String,Session> sessions=rooms.get(room);
         sessions.remove(session.getId());
         if (sessions.isEmpty()){
             rooms.remove(room);
         }
-        sendTextAll(room,"["+username+"]离开了聊天室!");
     }
 }
