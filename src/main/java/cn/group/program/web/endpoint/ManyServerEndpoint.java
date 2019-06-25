@@ -37,7 +37,8 @@ public class ManyServerEndpoint {
     public void sendTextAll(String room,String message){
         Map<String,Session> sessions=rooms.get(room);
         sessions.forEach((session_id,session)->{
-            sendText(session,message);
+            if (session.isOpen())
+                sendText(session,message);
         });
     }
 

@@ -167,6 +167,11 @@
 
         //离开聊天室
         $('#btn_exit').click(function () {
+            var ajax={
+                'username':username,
+                'room':room
+            };
+
             $.ajax({
                 url:'/exit.ajax',
                 type:'post',

@@ -62,6 +62,7 @@ public class ManyController {
     }
 
     @RequestMapping(value = "/exit.ajax",method = RequestMethod.POST)
+    @ResponseBody
     public void exit(@RequestBody Map<String, String> params){
         String username=params.get("username");
         String room=params.get("room");
