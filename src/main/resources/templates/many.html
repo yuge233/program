@@ -12,6 +12,7 @@
     <textarea id="text_chat_content" readonly="readonly" cols="50" rows="15">
     </textarea>
     <div>输入框:<input id="in_message" value=""/><button id="btn_send">发送</button></div>
+    <div><button id="begin" style="display: none">开始游戏</button></div>
 </div>
 <div id="enter">
     <div id="room">房间名:<input id="in_room" value=""/></div>
@@ -30,6 +31,7 @@
         var ws=null;
         var room;
         var username;
+        var describes;
 
         //创建房间点击事件
         $('#btn_create').click(function () {
@@ -75,6 +77,7 @@
             $('#enter').hide();
             $('#text_chat').show();
             $('#btn_exit').show();
+            $('#begin').show();
 
             $('#room_name').text(room);
             $('#user_name').text(username);
@@ -159,9 +162,29 @@
 
         //客户端发送消息到服务器
         $('#btn_send').click(function () {
-            var message='['+username+']:'+$('#in_message').val();
+            var message=$('#in_message').val();
+            var ajax={
+                'username':username,
+                'room':room,
+                'message':message
+            };
+            $('#in_message').val("");
             if (ws){
-                ws.send(message);
+                $.ajax({
+                    url:'/send.ajax',
+                    type:'post',
+                    async:true,
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data:JSON.stringify(ajax),
+                    success:function (data) {
+                        if (data.result == "success"  ) {
+                            ws.send('[系统]:用户-'+username+'回答正确,用时'+data.useTime+'秒');
+                        }else {
+                            ws.send('['+username+']:'+message);
+                        }
+                    }
+                });
             }
         });
 
@@ -178,17 +201,66 @@
                 async:false,
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
-                data:JSON.stringify(ajax)
+                data:JSON.stringify(ajax),
+                success:function (data) {
+                    if (data.result == "success"  ) {
+                        if (data.message)
+                            ws.send(data.message);
+                    }
+                }
             });
 
             $('#enter').show();
             $('#text_chat').hide();
             $('#btn_exit').hide();
+            $('#text_chat_content').text("");
 
             if (ws){
                 ws.close();
             }
         });
+
+        var current;
+        //点击开始游戏
+        $('#begin').click(function () {
+            var ajax={
+                'room':room
+            };
+            var time = 0;
+
+            $.ajax({
+                url:'/begin.ajax',
+                type:'post',
+                async:true,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data:JSON.stringify(ajax),
+                success:function (data) {
+                    if (data.result=="success"){
+                        $('#begin').text("开始下一局游戏");
+                        $('#begin').hide();
+                        describes=data.describes;
+                        ws.send("[系统]:游戏准备开始,每五秒显示下一提示");
+                        current=0;
+                        setTimeout(describe,5000);
+                    } else {
+                        alert(data.result);
+                    }
+                }
+            });
+        });
+
+        var describe=function () {
+            if (current < describes.length) {
+                ws.send("[系统]:提示"+(current+1)+"--"+describes[current].token);
+                if (current == describes.length-1) {
+                    $('#begin').show();
+                    ws.send("[系统]:提示结束,请回答");
+                }
+                current++;
+                setTimeout(describe,5000);
+            }
+        };
 
         window.onbeforeunload=function (event) {
             return "确认离开房间?";
