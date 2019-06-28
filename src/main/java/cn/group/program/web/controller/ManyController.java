@@ -4,7 +4,6 @@ import cn.group.program.model.Describe;
 import cn.group.program.model.Question;
 import cn.group.program.service.DescribeService;
 import cn.group.program.service.QuestionService;
-import cn.group.program.web.endpoint.ManyServerEndpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -125,15 +124,17 @@ public class ManyController {
         long count = questionService.count(); //获取题库总量
         long id = 1;  //随机开始一题
         if(count != 0){
-            id =  Math.abs(random.nextLong()) % count + 1;
+            do {    //防止跟上一题重复
+                id =  Math.abs(random.nextLong()) % count + 1;
+            }while (room_question.containsKey(room)&&room_question.get(room).getId().equals(id));
         }
 
-        Question question=questionService.findById(id);
+        Question question=questionService.findById(id); //记录问题
         if (!room_question.containsKey(room))
             room_question.put(room,question);
         else
             room_question.replace(room,question);
-        Long start_time=System.currentTimeMillis();
+        Long start_time=System.currentTimeMillis(); //记录开始时间
         if (!room_time.containsKey(room))
             room_time.put(room,start_time);
         else

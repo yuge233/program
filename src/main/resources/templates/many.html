@@ -9,7 +9,7 @@
 <div id="text_chat" style="display: none">
     <div>当前房间:<span id="room_name"></span></div>
     <div>当前用户:<span id="user_name"></span></div>
-    <textarea id="text_chat_content" readonly="readonly" cols="50" rows="15">
+    <textarea id="text_chat_content" readonly="readonly" cols="50" rows="15" onfocus="this.scrollTop = this.scrollHeight" >
     </textarea>
     <div>输入框:<input id="in_message" value=""/><button id="btn_send">发送</button></div>
     <div><button id="begin" style="display: none">开始游戏</button></div>
@@ -91,6 +91,8 @@
             ws.onmessage=function (event) { //监听消息
                 //服务端发送的消息
                 $('#text_chat_content').append(event.data+'\n');
+                var height=$("#text_chat_content")[0].scrollHeight;
+                $("#text_chat_content")[0].scrollTop=height;
             };
 
             ws.onclose=function (event) {
@@ -163,6 +165,8 @@
         //客户端发送消息到服务器
         $('#btn_send').click(function () {
             var message=$('#in_message').val();
+            if (message == "")
+                return;
             var ajax={
                 'username':username,
                 'room':room,
@@ -226,7 +230,6 @@
             var ajax={
                 'room':room
             };
-            var time = 0;
 
             $.ajax({
                 url:'/begin.ajax',
