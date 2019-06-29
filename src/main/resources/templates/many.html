@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>多人游戏</title>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 <body>
 <div id="text_chat" style="display: none">
@@ -90,7 +92,9 @@
 
             ws.onmessage=function (event) { //监听消息
                 //服务端发送的消息
-                $('#text_chat_content').append(event.data+'\n');
+                var obj = JSON.parse(event.data);
+                $('#text_chat_content').append(obj.message+'\n');
+                //实现滑动条自动下滑
                 var height=$("#text_chat_content")[0].scrollHeight;
                 $("#text_chat_content")[0].scrollTop=height;
             };
@@ -155,7 +159,7 @@
 
             ws.onmessage=function (event) { //监听消息
                 //服务端发送的消息
-                $('#text_chat_content').append(event.data+'\n');
+                $('#text_chat_content').append(event.data.message+'\n');
             };
 
             ws.onclose=function (event) {
@@ -187,6 +191,8 @@
                         }else {
                             ws.send('['+username+']:'+message);
                         }
+                        var height=$("#text_chat_content")[0].scrollHeight; //实现滑动条自动下滑
+                        $("#text_chat_content")[0].scrollTop=height;
                     }
                 });
             }

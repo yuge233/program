@@ -85,9 +85,12 @@ public class ManyController {
     public Map exit(@RequestBody Map<String, String> params){
         String username=params.get("username");
         String room=params.get("room");
+        Vector<String> users=null;
         Map map=new HashMap();
         String result="success";
-        Vector<String> users=rooms.get(room);
+        if (room!=null&&rooms.containsKey(room)){
+            users=rooms.get(room);
+        }
         if (users==null){
             result="fail";
             map.put("result",result);
