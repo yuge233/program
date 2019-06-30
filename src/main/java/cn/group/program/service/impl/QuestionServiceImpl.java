@@ -30,7 +30,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Long save(Question question) {
-        Question question1=repository.save(question);
+        Question question1 = repository.save(question);
         return question.getId();
     }
 

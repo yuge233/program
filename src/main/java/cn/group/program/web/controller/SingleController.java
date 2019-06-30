@@ -46,6 +46,11 @@ public class SingleController {
         return "single";
     }
 
+    @GetMapping("/userAddGameContent")
+    public String addGameContent() {
+        return "userAddGameContent";
+    }
+
     @GetMapping("/test")
     public String test(){
         return "hello";

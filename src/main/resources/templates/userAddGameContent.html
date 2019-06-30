@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>用户添加题目</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<div>
+    <div>添加提示：<input id="add_describe" value=""></div>
+    <p></p>
+    <div><button id="add_title">添加</button> <button id="stop_add_title">结束添加</button></div>
+    <table id="table_show">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>已添加提示</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<div id="question">
+    <div>添加答案：<input id="add_question" value=""></div>
+    <p></p>
+    <div><button id="add_result">确定添加</button></div>
+</div>
+
+<script type="text/javascript">
+    $('#question').hide();
+    $('#stop_add_title').hide();
+    var index = 1;
+    var array = [];
+    $('#add_title').click(function () {
+        var value = $('#add_describe').val();
+        if(value == "") {
+            alert("提示不能为空");
+            return;
+        }
+        array.push(value);
+        $("#table_show tbody").append('<tr><td>' + index + '</td><td>' + value + '</td></tr>');
+        index ++;
+        $('#stop_add_title').show();
+        $('#add_describe').val("");
+    });
+    $('#stop_add_title').click(function () {
+        $('#add_title').hide();
+        $('#question').show();
+        $('#stop_add_title').hide();
+    });
+    $('#add_result').click(function () {
+        var result = $('#add_question').val();
+        if(result == "") {
+            alert("答案不能为空");
+            return;
+        }
+        var myData={
+            "describeArray":array,
+            "questionResult":result
+        };
+        $.ajax({
+            url:"/member/saveUserData",
+            traditional: true,
+            type:'POST',
+            async:false,
+            data:myData,
+            success:function(data){//AJAX查询成功
+                if(data=="success"){
+                    alert("添加成功！");
+                }else{
+                    alert("添加失败！");
+                }
+            }
+        });
+        $('#add_result').hide();
+    });
+</script>
+
+</body>
+</html>
