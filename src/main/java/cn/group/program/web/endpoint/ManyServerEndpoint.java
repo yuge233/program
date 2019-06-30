@@ -1,16 +1,12 @@
 package cn.group.program.web.endpoint;
 
-import org.springframework.web.bind.annotation.PathVariable;
-
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
 import java.util.Map;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-@ServerEndpoint("/many/{room}/{username}")
+@ServerEndpoint(value = "/many/{room}/{username}",encoders = {MessageEncoder.class})
 public class ManyServerEndpoint {
 
     private static Map<String, Map<String,Session>> rooms=new ConcurrentHashMap<>(20);
@@ -28,8 +24,9 @@ public class ManyServerEndpoint {
     public void sendText(Session session, String message){
         RemoteEndpoint.Basic basic=session.getBasicRemote();
         try {
-            basic.sendText(message);
-        } catch (IOException e) {
+//            basic.sendText(message,false);
+            basic.sendObject(new Message(message));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -37,7 +34,8 @@ public class ManyServerEndpoint {
     public void sendTextAll(String room,String message){
         Map<String,Session> sessions=rooms.get(room);
         sessions.forEach((session_id,session)->{
-            sendText(session,message);
+            if (session!=null&&session.isOpen())
+                sendText(session,message);
         });
     }
 
@@ -48,11 +46,11 @@ public class ManyServerEndpoint {
 
     @OnClose
     public void close(@PathParam("room") String room, @PathParam("username") String username, Session session){
+        sendTextAll(room,"["+username+"]离开了聊天室!");
         Map<String,Session> sessions=rooms.get(room);
         sessions.remove(session.getId());
         if (sessions.isEmpty()){
             rooms.remove(room);
         }
-        sendTextAll(room,"["+username+"]离开了聊天室!");
     }
 }
