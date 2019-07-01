@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>用户添加题目</title>
@@ -7,10 +7,11 @@
 </head>
 <body>
 <div>
+    <div>添加答案：<input id="add_question" value=""></div>
     <div>添加提示：<input id="add_describe" value=""></div>
     <p></p>
-    <div><button id="add_title">添加</button> <button id="stop_add_title">结束添加</button></div>
-    <table id="table_show">
+    <div><button id="add_title">添加提示</button>
+        <table id="table_show">
         <thead>
         <tr>
             <th>序号</th>
@@ -21,15 +22,10 @@
         </tbody>
     </table>
 </div>
-<div id="question">
-    <div>添加答案：<input id="add_question" value=""></div>
-    <p></p>
-    <div><button id="add_result">确定添加</button></div>
-</div>
+<div id="question"><button id="add_result">确定添加题目</button></div>
 
 <script type="text/javascript">
     $('#question').hide();
-    $('#stop_add_title').hide();
     var index = 1;
     var array = [];
     $('#add_title').click(function () {
@@ -38,16 +34,12 @@
             alert("提示不能为空");
             return;
         }
+        $('#question').show();
+        $('#add_title').text("继续添加提示");
         array.push(value);
         $("#table_show tbody").append('<tr><td>' + index + '</td><td>' + value + '</td></tr>');
         index ++;
-        $('#stop_add_title').show();
         $('#add_describe').val("");
-    });
-    $('#stop_add_title').click(function () {
-        $('#add_title').hide();
-        $('#question').show();
-        $('#stop_add_title').hide();
     });
     $('#add_result').click(function () {
         var result = $('#add_question').val();
@@ -60,16 +52,19 @@
             "questionResult":result
         };
         $.ajax({
-            url:"/member/saveUserData",
+            url:"/member/saveUserData.ajax",
             traditional: true,
             type:'POST',
             async:false,
             data:myData,
             success:function(data){//AJAX查询成功
-                if(data=="success"){
-                    alert("添加成功！");
-                }else{
+                if(data=="false"){
                     alert("添加失败！");
+                }else{
+                    alert("添加成功,你的题目编号为"+data+",赶紧去试试吧,3s后回到主页");
+                    setTimeout(function () {
+                        window.location.href="/";
+                    },3000);
                 }
             }
         });

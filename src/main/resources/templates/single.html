@@ -29,6 +29,7 @@
     </table>
     <div id="end">每五秒显示下一提示</div>
     <div>
+        <button onclick="javascript:window.history.back(-1);">返回</button>
         <a th:href="@{'/single/'+${question.getId()-1}}" style="display: none" class="button"><button th:if="${question.getId()} gt 1">上一题</button></a>
         <a th:href="@{/}" style="display: none" class="button"><button>首页</button></a>
         <a th:href="@{'/single/'+${question.getId()+1}}" style="display: none" class="button"><button th:if="${question.getId()} lt ${count}">下一题</button></a>

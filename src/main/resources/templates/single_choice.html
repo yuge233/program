@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模式选择</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+</head>
+<body>
+<a href="/single"><button>单人随机游戏</button></a>
+<div>指定题目</div>
+<form  id="form" action="#" onsubmit="validate()" method="post">
+    <label>题目编号:</label><input id="id" name="id" type="text" value="">
+    <input type="submit" value="开始游戏">
+</form>
+<button onclick="javascript:window.history.back(-1);">返回</button>
+<script type="text/javascript">
+    var validate=function () {
+        var val=$('#id').val();
+        if (val == "") {
+            alert('编号不能为空');
+            return false;
+        }
+        $('#form').attr('action',"/single/"+val);
+        $('#form').submit();
+        return true;
+    }
+</script>
+</body>
+</html>

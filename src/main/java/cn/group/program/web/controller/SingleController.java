@@ -4,12 +4,13 @@ import cn.group.program.model.Describe;
 import cn.group.program.model.Question;
 import cn.group.program.service.DescribeService;
 import cn.group.program.service.QuestionService;
-import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.Random;
@@ -24,6 +25,11 @@ public class SingleController {
 
     Random random=new Random();
 
+    @GetMapping("/single_choice")
+    public String single_choice(){
+        return "single_choice";
+    }
+
     @GetMapping("/single")
     public String single(Model model){
         long count = questionService.count(); //获取题库总量
@@ -36,24 +42,19 @@ public class SingleController {
         return "redirect:/single/" + id;
     }
 
-    @GetMapping("/single/{id}")
+    @RequestMapping(value = "/single/{id}",method = {RequestMethod.GET,RequestMethod.POST})
     public String single_id(@PathVariable long id, Model model){
-        Question question=questionService.findById(id);
-        List<Describe> describes=describeService.findByOwn(id);
-        model.addAttribute("count",questionService.count());
-        model.addAttribute("question",question);
-        model.addAttribute("describes",describes);
-        return "single";
+        try{
+            Question question=questionService.findById(id);
+            List<Describe> describes=describeService.findByOwn(id);
+            model.addAttribute("count",questionService.count());
+            model.addAttribute("question",question);
+            model.addAttribute("describes",describes);
+            return "single";
+        }catch (Exception e){
+            model.addAttribute("message","无此编号游戏");
+            e.printStackTrace();
+            return "error";
+        }
     }
-
-    @GetMapping("/userAddGameContent")
-    public String addGameContent() {
-        return "userAddGameContent";
-    }
-
-    @GetMapping("/test")
-    public String test(){
-        return "hello";
-    }
-
 }

@@ -1,19 +1,21 @@
-package cn.group.program.service;
+package cn.group.program.web.controller;
 
 import cn.group.program.model.Describe;
 import cn.group.program.model.Question;
-import com.sun.xml.internal.fastinfoset.util.StringArray;
+import cn.group.program.service.DescribeService;
+import cn.group.program.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/member")
-public class UserDataSendRestService {
+public class UserDataSendController {
 
     @Autowired
     QuestionService questionService;
@@ -21,7 +23,13 @@ public class UserDataSendRestService {
     @Autowired
     DescribeService describeService;
 
-    @RequestMapping("/saveUserData")
+    @GetMapping("/userAddGameContent")
+    public String addGameContent() {
+        return "userAddGameContent";
+    }
+
+    @ResponseBody
+    @RequestMapping("/saveUserData.ajax")
     public String saveConfigMachineBilling(HttpServletRequest request){
         try {
             //获取所有变量
@@ -31,7 +39,7 @@ public class UserDataSendRestService {
             Question question = new Question();
             System.out.println(result);
             question.setAnswer(result);
-            questionService.save(question);
+            Long id=questionService.save(question);
             for(String describe : list) {
                 System.out.println(describe);
                 describes = new Describe();
@@ -39,10 +47,10 @@ public class UserDataSendRestService {
                 describes.setToken(describe);
                 describeService.save(describes);
             }
+            return ""+id;
         } catch (Exception e) {
             e.printStackTrace();
             return "false";
         }
-        return "success";
     }
 }
