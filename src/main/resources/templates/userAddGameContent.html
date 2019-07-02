@@ -10,17 +10,20 @@
     <div>添加答案：<input id="add_question" value=""></div>
     <div>添加提示：<input id="add_describe" value=""></div>
     <p></p>
-    <div><button id="add_title">添加提示</button>
+    <div>
+        <button id="add_title">添加提示</button>
+        <button id="remove_title">移除提示</button>
         <table id="table_show">
-        <thead>
-        <tr>
-            <th>序号</th>
-            <th>已添加提示</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>已添加提示</th>
+                </tr>
+            </thead>
+            <tbody id="tbodys">
+            </tbody>
+        </table>
+    </div>
 </div>
 <div id="question"><button id="add_result">确定添加题目</button></div>
 
@@ -40,6 +43,15 @@
         $("#table_show tbody").append('<tr><td>' + index + '</td><td>' + value + '</td></tr>');
         index ++;
         $('#add_describe').val("");
+    });
+    $('#remove_title').click(function () {
+       if((index - 1) > 0) {
+           index --;
+           document.getElementById('tbodys').lastChild.remove();
+           array.pop();
+       } else {
+           alert("当前提示为空");
+       }
     });
     $('#add_result').click(function () {
         var result = $('#add_question').val();
