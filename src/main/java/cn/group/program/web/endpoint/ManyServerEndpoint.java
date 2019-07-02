@@ -1,8 +1,12 @@
 package cn.group.program.web.endpoint;
 
+import org.springframework.web.bind.annotation.RequestBody;
+
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -18,20 +22,22 @@ public class ManyServerEndpoint {
         }
         Map<String,Session> sessions=rooms.get(room);
         sessions.put(session.getId(),session);
-        sendTextAll(room,"欢迎用户["+username+"]");
+        Message message=new Message("欢迎用户["+username+"]",1);
+
+        sendTextAll(room,message);
     }
 
-    public void sendText(Session session, String message){
+    public void sendText(Session session, Message message){
         RemoteEndpoint.Basic basic=session.getBasicRemote();
         try {
 //            basic.sendText(message,false);
-            basic.sendObject(new Message(message));
+            basic.sendObject(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void sendTextAll(String room,String message){
+    public void sendTextAll(String room,Message message){
         Map<String,Session> sessions=rooms.get(room);
         sessions.forEach((session_id,session)->{
             if (session!=null&&session.isOpen())
@@ -41,16 +47,18 @@ public class ManyServerEndpoint {
 
     @OnMessage
     public void message(@PathParam("room") String room, String message){
-        sendTextAll(room,message);
+        sendTextAll(room,new Message(message));
     }
 
     @OnClose
     public void close(@PathParam("room") String room, @PathParam("username") String username, Session session){
-        sendTextAll(room,"["+username+"]离开了聊天室!");
         Map<String,Session> sessions=rooms.get(room);
         sessions.remove(session.getId());
         if (sessions.isEmpty()){
             rooms.remove(room);
         }
+        Message message=new Message("["+username+"]离开了聊天室!",1);
+
+        sendTextAll(room,message);
     }
 }

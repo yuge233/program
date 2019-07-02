@@ -12,7 +12,7 @@
     <p></p>
     <div>
         <button id="add_title">添加提示</button>
-        <button id="remove_title">移除提示</button>
+        <button id="remove_title">移除最新提示</button>
         <table id="table_show">
             <thead>
                 <tr>
@@ -47,6 +47,8 @@
     $('#remove_title').click(function () {
        if((index - 1) > 0) {
            index --;
+           if (index == 1)
+               $('#question').hide();
            document.getElementById('tbodys').lastChild.remove();
            array.pop();
        } else {
