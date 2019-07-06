@@ -28,11 +28,12 @@
     <button id="btn_exit" style="display: none">离开房间</button>
 </div>
 <div class="col-md-4">
-    <table border="1">
+    <div class="Form" style="display: none">当前房间</div>
+    <table border="1" class="Form" style="display: none;">
         <thead>
             <tr>
                 <th>用户名</th>
-                <th>本轮得分(s)</th>
+                <th>本轮所用时间(秒)</th>
             </tr>
         </thead>
         <tbody id="userForm">
@@ -107,12 +108,31 @@
             ws.onmessage=function (event) { //监听消息
                 //服务端发送的消息
                 var obj = JSON.parse(event.data);
-                $('#text_chat_content').append(obj.message+'\n');
                 //实现滑动条自动下滑
                 var height=$("#text_chat_content")[0].scrollHeight;
                 $("#text_chat_content")[0].scrollTop=height;
-                if (obj.mode == 1) {
+                if (obj.mode==0){
+                    $('#text_chat_content').append(obj.message+'\n');
+                } else if (obj.mode == 1) {
+                    $('#text_chat_content').append(obj.message+'\n');
                     var users=obj.users;
+                    var temp="";
+                    $.each(users,function (index, value) {
+                        if ($('#score_' + value).text() == "")
+                            temp+='<tr><td>'+value+'</td><td id="score_'+value+'" class="score"></td></tr>';
+                        else
+                            temp+='<tr><td>'+value+'</td><td id="score_'+value+'" class="score">'+$('#score_' + value).text()+'</td></tr>'
+                    });
+                    $('#userForm').html(temp);
+                    $('.Form').show();
+                }else if (obj.mode == 2) {
+                    if ($('#score_' + obj.username).text() == "") {
+                        $('#text_chat_content').append(obj.message+'\n');
+                        $('#score_'+obj.username).text(obj.useTime);
+                    }
+                }else if (obj.mode == 3) {
+                    $('#text_chat_content').append(obj.message+'\n');
+                    $('.score').text("");
                 }
             };
 
@@ -177,12 +197,31 @@
             ws.onmessage=function (event) { //监听消息
                 //服务端发送的消息
                 var obj = JSON.parse(event.data);
-                $('#text_chat_content').append(obj.message+'\n');
                 //实现滑动条自动下滑
                 var height=$("#text_chat_content")[0].scrollHeight;
                 $("#text_chat_content")[0].scrollTop=height;
-                if (obj.mode == 1) {
+                if (obj.mode==0){
+                    $('#text_chat_content').append(obj.message+'\n');
+                } else if (obj.mode == 1) {
+                    $('#text_chat_content').append(obj.message+'\n');
                     var users=obj.users;
+                    var temp="";
+                    $.each(users,function (index, value) {
+                        if ($('#score_' + value).text() == "")
+                            temp+='<tr><td>'+value+'</td><td id="score_'+value+'" class="score"></td></tr>';
+                        else
+                            temp+='<tr><td>'+value+'</td><td id="score_'+value+'" class="score">'+$('#score_' + value).text()+'</td></tr>'
+                    });
+                    $('#userForm').html(temp);
+                    $('.Form').show();
+                }else if (obj.mode == 2) {
+                    if ($('#score_' + obj.username).text() == "") {
+                        $('#text_chat_content').append(obj.message+'\n');
+                        $('#score_'+obj.username).text(obj.useTime);
+                    }
+                }else if (obj.mode == 3) {
+                    $('#text_chat_content').append(obj.message+'\n');
+                    $('.score').text("");
                 }
             };
 
@@ -211,9 +250,18 @@
                     data:JSON.stringify(ajax),
                     success:function (data) {
                         if (data.result == "success"  ) {
-                            ws.send('[系统]:用户-'+username+'回答正确,用时'+data.useTime+'秒');
+                            // ws.send('[系统]:用户-'+username+'回答正确,用时'+data.useTime+'秒');
+                            ws.send(JSON.stringify({
+                                message:'[系统]:用户-'+username+'回答正确,用时'+data.useTime+'秒',
+                                mode:2,
+                                useTime:data.useTime
+                            }))
                         }else {
-                            ws.send('['+username+']:'+message);
+                            // ws.send('['+username+']:'+message);
+                            ws.send(JSON.stringify({
+                                message:'['+username+']:'+message,
+                                mode:0
+                            }));
                         }
                         var height=$("#text_chat_content")[0].scrollHeight; //实现滑动条自动下滑
                         $("#text_chat_content")[0].scrollTop=height;
@@ -239,7 +287,10 @@
                 success:function (data) {
                     if (data.result == "success"  ) {
                         if (data.message)
-                            ws.send(data.message);
+                            ws.send(JSON.stringify({
+                                message:data.message,
+                                mode:0
+                            }));
                     }
                 }
             });
@@ -273,7 +324,10 @@
                         $('#begin').text("开始下一局游戏");
                         $('#begin').hide();
                         describes=data.describes;
-                        ws.send("[系统]:游戏准备开始,每五秒显示下一提示");
+                        ws.send(JSON.stringify({
+                            message:"[系统]:本轮游戏准备开始,每五秒显示下一提示",
+                            mode:3
+                        }));
                         current=0;
                         setTimeout(describe,5000);
                     } else {
@@ -285,10 +339,16 @@
 
         var describe=function () {
             if (current < describes.length) {
-                ws.send("[系统]:提示"+(current+1)+"--"+describes[current].token);
+                ws.send(JSON.stringify({
+                    message:"[系统]:提示"+(current+1)+"--"+describes[current].token,
+                    mode:0
+                }));
                 if (current == describes.length-1) {
                     $('#begin').show();
-                    ws.send("[系统]:提示结束,请回答");
+                    ws.send(JSON.stringify({
+                        message:"[系统]:提示结束,请回答",
+                        mode:0
+                    }));
                 }
                 current++;
                 setTimeout(describe,5000);

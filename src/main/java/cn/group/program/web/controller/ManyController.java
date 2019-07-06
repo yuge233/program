@@ -69,6 +69,8 @@ public class ManyController {
             Vector<String> users=rooms.get(room);
             if (users.contains(username)){
                 result="用户名重复";
+            }else if (room_question.containsKey(room)||room_time.containsKey(room)){
+                result="房间已经开始游戏,无法进入";
             }else {
                 users.add(username);
                 result="success";
