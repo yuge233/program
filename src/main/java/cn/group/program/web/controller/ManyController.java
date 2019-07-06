@@ -82,9 +82,46 @@ public class ManyController {
         return map;
     }
 
+
+    @RequestMapping(value = "/fire.ajax",method = RequestMethod.POST)
+    @ResponseBody
+    public Map fire(@RequestBody Map<String, String> params){
+        System.out.println("fuck");
+        String username=params.get("firename");
+        String room=params.get("room");
+        Vector<String> users=null;
+        Map map=new HashMap();
+        String result="success";
+        if (room!=null&&rooms.containsKey(room)){
+            users=rooms.get(room);
+        }
+        if (users==null){
+            result="fail";
+            map.put("result",result);
+            return map;
+        }
+        if (username!=null){
+            if(users.indexOf(username)==0){
+                // rooms.remove(room);
+                // map.put("message","房主离开了房间,房间关闭");
+            }else {
+                users.remove(username);
+                
+                map.put("message",username+"离开了房间");
+            }
+        }
+        // if (users.isEmpty()){
+        //     rooms.remove(room);
+        // }
+        map.put("result",result);
+        return map;
+    }
+
+
     @RequestMapping(value = "/exit.ajax",method = RequestMethod.POST)
     @ResponseBody
     public Map exit(@RequestBody Map<String, String> params){
+        System.out.println("fuck");
         String username=params.get("username");
         String room=params.get("room");
         Vector<String> users=null;
