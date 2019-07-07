@@ -86,8 +86,7 @@ public class ManyController {
     @RequestMapping(value = "/fire.ajax",method = RequestMethod.POST)
     @ResponseBody
     public Map fire(@RequestBody Map<String, String> params){
-        System.out.println("fuck");
-        String username=params.get("firename");
+        String username=params.get("username");
         String room=params.get("room");
         Vector<String> users=null;
         Map map=new HashMap();
@@ -98,21 +97,17 @@ public class ManyController {
         if (users==null){
             result="fail";
             map.put("result",result);
+            map.put("message","房间已关闭");
             return map;
         }
         if (username!=null){
             if(users.indexOf(username)==0){
-                // rooms.remove(room);
-                // map.put("message","房主离开了房间,房间关闭");
+                result="fail";
+                map.put("message","无法踢自己");
             }else {
                 users.remove(username);
-                
-                map.put("message",username+"离开了房间");
             }
         }
-        // if (users.isEmpty()){
-        //     rooms.remove(room);
-        // }
         map.put("result",result);
         return map;
     }

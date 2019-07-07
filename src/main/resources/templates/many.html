@@ -27,9 +27,9 @@
     </div>
     <button id="btn_exit" style="display: none">离开房间</button>
     
-    <div id = "fire_div" style="display: none">输入框:
+    <div id = "fire_div" style="display: none">用户名:
         <input id="fire_name" value=""/>
-        <button id="btn_fire">踢出</button>
+        <button id="btn_fire">踢出房间</button>
     </div>
 </div>
 <div class="col-md-4">
@@ -39,9 +39,6 @@
             <tr>
                 <th>用户名</th>
                 <th>本轮所用时间(秒)</th>
-                
-                    
-                
             </tr>
         </thead>
         <tbody id="userForm">
@@ -145,18 +142,14 @@
                 }else if (obj.mode == 4) {
                     console.log(obj)
                     if(obj.message==username){
-
-                        ws.close()
                         $('#enter').show();
                         $('#text_chat').hide();
                         $('#btn_exit').hide();
                         $('#text_chat_content').text("");
                         $('.Form').hide();
-                        alert("你被踢出房间")
+                        alert("你被踢出房间");
+                        ws.close()
                     }
-                    
-                    // $('#text_chat_content').append(obj.message+'\n');
-                    // $('.score').text("");
                 }
             };
 
@@ -183,22 +176,12 @@
                 data:JSON.stringify(ajax),
                 success:function (data) {
                     if (data.result == "success"  ) {
-                        console.log(firename);
-                        console.log("-------")
-                        console.log(ajax)
                         ws.send(JSON.stringify({
                                 message:ajax.username,
                                 mode:4
                             }));
-                        // ws2.close();
-                        if (data.message)
-                        console.log("fuck");
-                        // ws.send(JSON.stringify({
-                        //         message:'[系统]:用户-'+username+'回答正确,用时'+data.useTime+'秒',
-                        //         mode:2,
-                        //         useTime:data.useTime
-                        //     }))
-                            
+                    }else {
+                        alert(data.message);
                     }
                 }
             });
@@ -297,18 +280,15 @@
                     $('#text_chat_content').append(obj.message+'\n');
                     $('.score').text("");
                 }else if (obj.mode == 4) {
-                    console.log(obj)
                     if(obj.message==username){
-                        ws.close()
                         $('#enter').show();
                         $('#text_chat').hide();
                         $('#btn_exit').hide();
                         $('#text_chat_content').text("");
                         $('.Form').hide();
-                        alert("你被踢出房间")
+                        alert("你被踢出房间");
+                        ws.close();
                     }
-                    $('#text_chat_content').append(obj.message+'\n');
-                    // $('.score').text("");
                 }
             };
 

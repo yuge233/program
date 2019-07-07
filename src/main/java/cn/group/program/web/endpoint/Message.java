@@ -6,7 +6,7 @@ import java.util.Vector;
 class Message implements Serializable {
     private String message;
     private int mode;
-    //普通消息为0,修改房间列表为1,修改成绩为2,清空成绩为3
+    //普通消息为0,修改房间列表为1,修改成绩为2,清空成绩为3,踢人为4
 
     private Vector<String> users;   //用于mode:1
 
