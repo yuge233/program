@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>用户添加题目</title>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
+<!--隐藏表单存储后台数据-->
+<input type="hidden" th:value="${photosPath}" id="photo_path">
 <div>
     <div>添加答案：<input id="add_question" value=""></div>
     <div>添加提示：<input id="add_describe" value=""></div>
+    <input type="button"onclick="javascrtpt:window.location.href='/uploadPhotoIndex'" value="上传照片">
     <p></p>
     <div>
         <button id="add_title">添加提示</button>
@@ -28,6 +31,10 @@
 <div id="question"><button id="add_result">确定添加题目</button></div>
 
 <script type="text/javascript">
+//    var path = $('#photo_path').val();
+//    if(path != "test") {
+//
+//    }
     $('#question').hide();
     var index = 1;
     var array = [];
@@ -66,7 +73,7 @@
             "questionResult":result
         };
         $.ajax({
-            url:"/member/saveUserData.ajax",
+            url:"/saveUserData.ajax",
             traditional: true,
             type:'POST',
             async:false,

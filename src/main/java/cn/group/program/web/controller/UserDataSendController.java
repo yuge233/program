@@ -6,16 +6,21 @@ import cn.group.program.service.DescribeService;
 import cn.group.program.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Controller
-@RequestMapping("/member")
 public class UserDataSendController {
+
+    private final String FIRST_PATH = "D:\\insertPhoto\\";// 存入数据库的路径前缀
+    private String photosPath = "test";
 
     @Autowired
     QuestionService questionService;
@@ -24,7 +29,8 @@ public class UserDataSendController {
     DescribeService describeService;
 
     @GetMapping("/userAddGameContent")
-    public String addGameContent() {
+    public String addGameContent(Model model) {
+        model.addAttribute("photosPath", photosPath);
         return "userAddGameContent";
     }
 
@@ -48,6 +54,49 @@ public class UserDataSendController {
                 describeService.save(describes);
             }
             return ""+id;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "false";
+        }
+    }
+
+    @RequestMapping("/uploadPhotoIndex")
+    public String upLoadPhotos() {
+        return "uploadPhoto";
+    }
+
+    @RequestMapping("/zyupload.css")
+    public String zyUploadCss() {
+        return "zyupload.css";
+    }
+
+    @RequestMapping("/zyupload.js")
+    public String zyUploadJs() {
+        return "zyupload.js";
+    }
+
+    @RequestMapping("/insertPhoto")
+    public String uploadPhoto(@RequestParam("file") MultipartFile[] file, HttpServletRequest request) throws Exception {
+        for(MultipartFile thisFile : file) {
+            String fileName = thisFile.getOriginalFilename();// 得到文件名称
+            File tempFile = new File(FIRST_PATH, fileName);
+            if (!fileName.isEmpty() && !thisFile.isEmpty()) {
+                if (!tempFile.getParentFile().exists()) {// 检测是否存在目录
+                    tempFile.getParentFile().mkdirs();
+                }
+                thisFile.transferTo(tempFile);// 写入文件
+            }
+        }
+        return "uploadPhoto";//上传成功返回上传图片页面。
+    }
+
+    @ResponseBody
+    @RequestMapping("/insertPhoto.ajax")
+    public String insertPhotoToDb(HttpServletRequest request) throws Exception{
+        try {
+            //获取所有变量
+            photosPath = FIRST_PATH + request.getParameter("photoPath");
+            return "true";
         } catch (Exception e) {
             e.printStackTrace();
             return "false";
