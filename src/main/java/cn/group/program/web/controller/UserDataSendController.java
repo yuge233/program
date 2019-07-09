@@ -19,7 +19,6 @@ import java.util.Map;
 @Controller
 public class UserDataSendController {
 
-    private final String FIRST_PATH = "D:\\insertPhoto\\";// 存入数据库的路径前缀
     private String photosPath = "test";
 
     @Autowired
@@ -50,7 +49,13 @@ public class UserDataSendController {
                 System.out.println(describe);
                 describes = new Describe();
                 describes.setOwn(question.getId());
-                describes.setToken(describe);
+                if(describe.contains("D:\\insertPhoto\\")) {
+                    describes.setPhotoPath(describe);
+                    describes.setToken(null);
+                }else {
+                    describes.setToken(describe);
+                    describes.setPhotoPath(null);
+                }
                 describeService.save(describes);
             }
             return ""+id;
@@ -60,46 +65,25 @@ public class UserDataSendController {
         }
     }
 
-    @RequestMapping("/uploadPhotoIndex")
-    public String upLoadPhotos() {
-        return "uploadPhoto";
-    }
-
-    @RequestMapping("/zyupload.css")
-    public String zyUploadCss() {
-        return "zyupload.css";
-    }
-
-    @RequestMapping("/zyupload.js")
-    public String zyUploadJs() {
-        return "zyupload.js";
-    }
-
-    @RequestMapping("/insertPhoto")
-    public String uploadPhoto(@RequestParam("file") MultipartFile[] file, HttpServletRequest request) throws Exception {
-        for(MultipartFile thisFile : file) {
-            String fileName = thisFile.getOriginalFilename();// 得到文件名称
-            File tempFile = new File(FIRST_PATH, fileName);
-            if (!fileName.isEmpty() && !thisFile.isEmpty()) {
-                if (!tempFile.getParentFile().exists()) {// 检测是否存在目录
-                    tempFile.getParentFile().mkdirs();
-                }
-                thisFile.transferTo(tempFile);// 写入文件
-            }
-        }
-        return "uploadPhoto";//上传成功返回上传图片页面。
-    }
-
     @ResponseBody
     @RequestMapping("/insertPhoto.ajax")
-    public String insertPhotoToDb(HttpServletRequest request) throws Exception{
+    public String uploadPhoto(@RequestParam("photo") MultipartFile[] file, HttpServletRequest request) {
         try {
-            //获取所有变量
-            photosPath = FIRST_PATH + request.getParameter("photoPath");
+            for(MultipartFile thisFile : file) {
+                String fileName = thisFile.getOriginalFilename();// 得到文件名称
+                File tempFile = new File("D:\\insertPhoto\\", fileName);
+                if (!fileName.isEmpty() && !thisFile.isEmpty()) {
+                    if (!tempFile.getParentFile().exists()) {// 检测是否存在目录
+                        tempFile.getParentFile().mkdirs();
+                    }
+                    thisFile.transferTo(tempFile);// 写入文件
+                }
+            }
             return "true";
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
-            return "false";
         }
+        return "false";//上传成功返回上传图片页面。
     }
+
 }

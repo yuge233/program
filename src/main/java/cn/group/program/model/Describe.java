@@ -17,6 +17,9 @@ public class Describe implements Serializable {
     @Column(name = "own")
     private Long own;
 
+    @Column(name = "photoPath")
+    private String photoPath;
+
     public Long getId() {
         return id;
     }
@@ -39,5 +42,13 @@ public class Describe implements Serializable {
 
     public void setOwn(Long own) {
         this.own = own;
+    }
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 }
