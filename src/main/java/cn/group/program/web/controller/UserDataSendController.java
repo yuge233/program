@@ -7,11 +7,14 @@ import cn.group.program.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -69,9 +72,10 @@ public class UserDataSendController {
     @RequestMapping("/insertPhoto.ajax")
     public String uploadPhoto(@RequestParam("photo") MultipartFile[] file, HttpServletRequest request) {
         try {
+            String path = System.getProperty("user.dir")+"\\src\\main\\resources\\static\\images";
             for(MultipartFile thisFile : file) {
                 String fileName = thisFile.getOriginalFilename();// 得到文件名称
-                File tempFile = new File("C:\\programs\\src\\main\\resources\\static\\images\\", fileName);
+                File tempFile = new File(path, fileName);
                 if (!fileName.isEmpty() && !thisFile.isEmpty()) {
                     if (!tempFile.getParentFile().exists()) {// 检测是否存在目录
                         tempFile.getParentFile().mkdirs();

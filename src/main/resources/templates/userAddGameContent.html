@@ -134,13 +134,14 @@
             url:  "/insertPhoto.ajax",
             data: formData,
             dataType: 'json',
+            enctype: 'multipart/form-data',
             processData: false, // 告诉jQuery不要去处理发送的数据
             contentType: false, // 告诉jQuery不要去设置Content-Type请求头
             xhrFields:{withCredentials:true},
             async: true,    //默认是true：异步，false：同步。
             success: function (data) {
                 alert("添加成功");
-                var photoPath = 'images/' + newFile.name;
+                var photoPath = '/images/' + newFile.name;
                 array.push(photoPath);
             },
             error: function (data) {

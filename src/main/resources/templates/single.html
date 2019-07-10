@@ -23,7 +23,8 @@
         <tbody th:each="describe:${describes}">
             <tr th:id="'td_'+${describeStat.count}" style="display: none">
                 <td th:text="${describeStat.count}" >1</td>
-                <td th:text="${describe.getToken()}"></td>
+                <td th:if="${describe.getToken()}!=null" th:text="${describe.getToken()}"></td>
+                <td th:unless="${describe.getToken()}!=null"><img th:src="${describe.getPhotoPath()}"></td>
             </tr>
         </tbody>
     </table>
