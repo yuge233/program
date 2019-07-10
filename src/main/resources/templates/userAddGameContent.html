@@ -92,6 +92,7 @@
     });
 
     function imgPreview(fileDom,i) {
+        $('#question').show();
         //判断是否支持FileReader
         if(window.FileReader) {
             var reader = new FileReader();
@@ -117,8 +118,16 @@
         };
         reader.readAsDataURL(file);
 
+        var originFile = $('#input_file')[0].files[0]; //获取file input中的File对象
+        var newReader = new FileReader();
+        newReader.readAsDataURL(originFile);
+        var URL = URL || webkitURL;
+        var blob = URL.createObjectURL(originFile);
+        // 构造新File对象
+        var newFile = new File([blob ], Math.round(Math.random()*10000000000).toString() + originFile.name);
         var formData = new FormData();
-        formData.append('photo', $('#input_file')[0].files[0]);
+        formData.append('photo', newFile);
+
         //ajax请求
         $.ajax({
             type: "post",
@@ -131,7 +140,7 @@
             async: true,    //默认是true：异步，false：同步。
             success: function (data) {
                 alert("添加成功");
-                var photoPath = 'D:\\insertPhoto\\' + $('#input_file')[0].files[0].name;
+                var photoPath = 'images/' + newFile.name;
                 array.push(photoPath);
             },
             error: function (data) {

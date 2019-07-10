@@ -23,7 +23,7 @@
         <tbody th:each="describe:${describes}">
             <tr th:id="'td_'+${describeStat.count}" style="display: none">
                 <td th:text="${describeStat.count}" >1</td>
-                <td th:text="${describe.getToken()}">水果</td>
+                <td th:text="${describe.getToken()}"></td>
             </tr>
         </tbody>
     </table>

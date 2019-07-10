@@ -49,7 +49,7 @@ public class UserDataSendController {
                 System.out.println(describe);
                 describes = new Describe();
                 describes.setOwn(question.getId());
-                if(describe.contains("D:\\insertPhoto\\")) {
+                if(describe.contains("images/")) {
                     describes.setPhotoPath(describe);
                     describes.setToken(null);
                 }else {
@@ -71,7 +71,7 @@ public class UserDataSendController {
         try {
             for(MultipartFile thisFile : file) {
                 String fileName = thisFile.getOriginalFilename();// 得到文件名称
-                File tempFile = new File("D:\\insertPhoto\\", fileName);
+                File tempFile = new File("C:\\programs\\src\\main\\resources\\static\\images\\", fileName);
                 if (!fileName.isEmpty() && !thisFile.isEmpty()) {
                     if (!tempFile.getParentFile().exists()) {// 检测是否存在目录
                         tempFile.getParentFile().mkdirs();
