@@ -91,6 +91,7 @@
         $('#add_result').hide();
     });
 
+    //处理图片上传
     function imgPreview(fileDom,i) {
         $('#question').show();
         //判断是否支持FileReader
@@ -119,16 +120,11 @@
         reader.readAsDataURL(file);
 
         var originFile = $('#input_file')[0].files[0]; //获取file input中的File对象
-        var newReader = new FileReader();
-        newReader.readAsDataURL(originFile);
-        var URL = URL || webkitURL;
-        var blob = URL.createObjectURL(originFile);
-        // 构造新File对象
-        var newFile = new File([blob ], Math.round(Math.random()*10000000000).toString() + originFile.name);
+        var newFileName = Math.round(Math.random()*10000000000).toString() + originFile.name;   //文件重命名
         var formData = new FormData();
-        formData.append('photo', newFile);
+        formData.append('photo', originFile, newFileName);  //使用formData进行提交上传
 
-        //ajax请求
+        //ajax请求，将用户上传的图片保存到服务器
         $.ajax({
             type: "post",
             url:  "/insertPhoto.ajax",
