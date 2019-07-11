@@ -210,7 +210,7 @@ img:hover {
 body
 {
     /*背景图片*/
-    background-image:url('static.images/4.jpg');
+    background-image:url('/images/4.jpg');
     background-color:#cccccc;
     background-repeat:no-repeat;
     background-size: 100%;
@@ -244,4 +244,22 @@ body
     font-family: Microsoft YaHei;
     font-size: 20px;
 
+}
+
+#input_file
+{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+}
+
+#add_button
+{
+    background: #58a;
+    border: #58a;
+    position: relative;
+    overflow: hidden;
 }
