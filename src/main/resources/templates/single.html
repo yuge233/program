@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>单人游戏</title>
-    <link rel="stylesheet" type="text/css" href="css\mystyle.css">
+    <link rel="stylesheet" type="text/css" href="../css/mystyle.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
+    <div class="size2">
     <!--隐藏表单存储后台数据-->
     <input type="hidden" th:value="${describes.size()}" id="size">
     <input type="hidden" th:value="${question.getAnswer()}" id="answer">
@@ -36,6 +37,7 @@
         <a th:href="@{/}" style="display: none" class="button"><button>首页</button></a>
         <a th:href="@{'/single/'+${question.getId()+1}}" style="display: none" class="button"><button th:if="${question.getId()} lt ${count}">下一题</button></a>
     </div>
+   </div>
 <script th:inline="javascript">
     $(document).ready(function () {
         var time = 0;
