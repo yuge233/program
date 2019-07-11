@@ -137,7 +137,7 @@
             async: true,    //默认是true：异步，false：同步。
             success: function (data) {
                 alert("添加成功");
-                var photoPath = '/images/' + newFile.name;
+                var photoPath = '/images/' + newFileName;
                 array.push(photoPath);
             },
             error: function (data) {
