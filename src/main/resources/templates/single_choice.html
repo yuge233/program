@@ -8,14 +8,18 @@
 
 </head>
 <body>
-    <div class="size2">
-<a href="/single"><button>单人随机游戏</button></a>
-<div>指定题目</div>
-<form  id="form" action="#" onsubmit="validate()" method="post">
-    <label>题目编号:</label><input id="id" name="id" type="text" value="">
-    <input type="submit" value="开始游戏">
-</form>
-<button onclick="javascript:window.history.back(-1);">返回</button>
+<div class="size2">
+    <p></p>
+    <form  id="form" action="#" onsubmit="validate()" method="post">
+        <label>指定题目编号: </label><input id="id" name="id" type="text" value="" style="height: 20pt">
+        <input type="submit" value="开始游戏">
+    </form>
+    <p></p>
+    <div>
+        <a href="/single"><button>单人随机游戏</button></a>
+        <button onclick="javascript:window.history.back(-1);">返回首页</button>
+    </div>
+</div>
 <script type="text/javascript">
     var validate=function () {
         var val=$('#id').val();
@@ -28,6 +32,5 @@
         return true;
     }
 </script>
-</div>        
 </body>
 </html>

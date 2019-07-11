@@ -150,16 +150,6 @@ li { background: var(--accent-color); }
     float: left;
 }
 
-img {
-    clip-path: polygon(50% 0, 100% 50%,
-    50% 100%, 0 50%);
-    transition: 1s clip-path;
-}
-img:hover {
-    clip-path: polygon(0 0, 100% 0,
-    100% 100%, 0 100%);
-}
-
 .box12 {
     width: 10em;
     height: 8em;
@@ -243,7 +233,6 @@ body
 {
     font-family: Microsoft YaHei;
     font-size: 20px;
-
 }
 
 #input_file
@@ -258,8 +247,6 @@ body
 
 #add_button
 {
-    background: #58a;
-    border: #58a;
     position: relative;
     overflow: hidden;
 }

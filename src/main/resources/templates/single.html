@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>单人游戏</title>
-    <link rel="stylesheet" type="text/css" href="css\mystyle.css">
+    <link rel="stylesheet" type="text/css" href="../css/mystyle.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
+    <div class="size2">
     <!--隐藏表单存储后台数据-->
     <input type="hidden" th:value="${describes.size()}" id="size">
     <input type="hidden" th:value="${question.getAnswer()}" id="answer">
+        <label>答案:</label>
     <input type="text" id="reply" name="reply">
-    <button id="submit">提交</button>
+        <button id="submit">提交</button>
     <div>游戏用时:<span id="timer">0</span></div>
     <div id="result"></div>
     <table>
@@ -25,7 +27,7 @@
             <tr th:id="'td_'+${describeStat.count}" style="display: none">
                 <td th:text="${describeStat.count}" >1</td>
                 <td th:if="${describe.getToken()}!=null" th:text="${describe.getToken()}"></td>
-                <td th:unless="${describe.getToken()}!=null"><img th:src="${describe.getPhotoPath()}"></td>
+                <td th:unless="${describe.getToken()}!=null"><img id="image" th:src="${describe.getPhotoPath()}"></td>
             </tr>
         </tbody>
     </table>
@@ -36,6 +38,7 @@
         <a th:href="@{/}" style="display: none" class="button"><button>首页</button></a>
         <a th:href="@{'/single/'+${question.getId()+1}}" style="display: none" class="button"><button th:if="${question.getId()} lt ${count}">下一题</button></a>
     </div>
+   </div>
 <script th:inline="javascript">
     $(document).ready(function () {
         var time = 0;

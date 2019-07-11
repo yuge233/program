@@ -7,33 +7,37 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
-    <div class="size2">
-<div>
-    <div>添加答案：<input id="add_question" value=""></div>
-    <div>添加提示：<input id="add_describe" value=""></div>
-    <div class="file-box">
-        <button id="add_button">添加图片
-            <input type="file" value="" name="file" id = "input_file"
-                   accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" onchange="imgPreview(this,0)" >
-        </button>
-    </div>
-    <p></p>
+<div class="size2">
     <div>
-        <button id="add_title">添加</button>
-        <button id="remove_title">移除上一次</button>
-        <table id="table_show">
-            <thead>
+        <p></p>
+        <p></p>
+        <div style="line-height: 20px">答案：<input id="add_question" value=""></div>
+        <p></p>
+        <div style="line-height: 20px">提示：<input id="add_describe" value=""></div>
+        <p></p>
+        <div>
+            <button id="add_title">添加文字提示</button>
+            <button id="add_button">添加图片提示
+                <input type="file" value="" name="file" id = "input_file"
+                       accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" onchange="imgPreview(this,0)" >
+            </button>
+            <button id="remove_title">撤销当前操作</button>
+        </div>
+        <p></p>
+        <div>
+            <table id="table_show">
+                <thead>
                 <tr>
                     <th>序号</th>
                     <th>已添加提示</th>
                 </tr>
-            </thead>
-            <tbody id="tbodys">
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="tbodys" style="text-align: center">
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
-<div id="question"><button id="add_result">确定添加题目</button></div>
+    <div id="question"><button id="add_result">确定添加题目</button></div>
 </div>
 <script type="text/javascript">
     $('#question').hide();
@@ -114,7 +118,6 @@
         reader.onload = function(e) {
             //图片路径设置为读取的图片
             // img.src = e.target.result;
-            console.log(document.getElementsByClassName('file-box'));
             $("#table_show tbody").append('<tr><td>' + index + '</td><td><img src='+e.target.result+'></td></tr>');
             index ++;
             console.log('reader',reader)
