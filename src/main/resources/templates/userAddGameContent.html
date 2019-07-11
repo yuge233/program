@@ -118,7 +118,7 @@
         reader.onload = function(e) {
             //图片路径设置为读取的图片
             // img.src = e.target.result;
-            $("#table_show tbody").append('<tr><td>' + index + '</td><td><img src='+e.target.result+'></td></tr>');
+            $("#table_show tbody").append('<tr><td>' + index + '</td><td><img src='+e.target.result+' width="304" height="228"></td></tr>');
             index ++;
             console.log('reader',reader)
         };

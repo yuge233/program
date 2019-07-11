@@ -38,7 +38,7 @@
             <button id="btn_send" style="color: white">发送</button>
         </div>
         <p></p>
-        <div>用户名:
+        <div id="exit_btn">用户名:
             <input id="fire_name" value=""/>
             <button id="btn_fire" style="color: white">踢出房间</button>
         </div>
@@ -165,6 +165,7 @@
                         $('#btn_exit').hide();
                         $('#text_chat_content').text("");
                         $('.Form').hide();
+                        $('#fire_div').hide();
                         alert("你被踢出房间");
                         ws.close()
                     }
@@ -257,8 +258,8 @@
 
             $('#enter').hide();
             $('#text_chat').show();
-            $('#btn_exit').show();
-
+            $('#fire_div').show();
+            $('#exit_btn').hide();
             $('#room_name').text(room);
             $('#user_name').text(username);
 
@@ -304,6 +305,7 @@
                         $('#btn_exit').hide();
                         $('#text_chat_content').text("");
                         $('.Form').hide();
+                        $('#fire_div').hide();
                         alert("你被踢出房间");
                         ws.close();
                     }
@@ -383,6 +385,8 @@
             $('#enter').show();
             $('#text_chat').hide();
             $('#btn_exit').hide();
+            $('#fire_div').hide();
+            $('#begin').hide();
             $('#text_chat_content').text("");
 
             if (ws){
@@ -423,7 +427,7 @@
         });
 
         var describe=function () {
-            if (current < describes.length) {
+            if (current < describes.length && describes[current]!=null) {
                 ws.send(JSON.stringify({
                     message:"[系统]:提示"+(current+1)+"--"+describes[current].token,
                     mode:0

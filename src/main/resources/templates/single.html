@@ -27,7 +27,7 @@
             <tr th:id="'td_'+${describeStat.count}" style="display: none">
                 <td th:text="${describeStat.count}" >1</td>
                 <td th:if="${describe.getToken()}!=null" th:text="${describe.getToken()}"></td>
-                <td th:unless="${describe.getToken()}!=null"><img id="image" th:src="${describe.getPhotoPath()}"></td>
+                <td th:unless="${describe.getToken()}!=null"><img id="image" th:src="${describe.getPhotoPath()}" width="304" height="228"></td>
             </tr>
         </tbody>
     </table>

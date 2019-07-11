@@ -1,8 +1,10 @@
 package cn.group.program.web.controller;
 
 import cn.group.program.model.Describe;
+import cn.group.program.model.Describet;
 import cn.group.program.model.Question;
 import cn.group.program.service.DescribeService;
+import cn.group.program.service.DescribetService;
 import cn.group.program.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,7 @@ public class SingleController {
     private QuestionService questionService;
 
     @Autowired
-    private DescribeService describeService;
+    private DescribetService describetService;
 
     Random random=new Random();
 
@@ -46,10 +48,10 @@ public class SingleController {
     public String single_id(@PathVariable long id, Model model){
         try{
             Question question=questionService.findById(id);
-            List<Describe> describes=describeService.findByOwn(id);
+            List<Describet> describest=describetService.findByOwn(id);
             model.addAttribute("count",questionService.count());
             model.addAttribute("question",question);
-            model.addAttribute("describes",describes);
+            model.addAttribute("describes",describest);
             return "single";
         }catch (Exception e){
             model.addAttribute("message","无此编号游戏");

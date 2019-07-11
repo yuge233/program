@@ -1,8 +1,10 @@
 package cn.group.program.web.controller;
 
 import cn.group.program.model.Describe;
+import cn.group.program.model.Describet;
 import cn.group.program.model.Question;
 import cn.group.program.service.DescribeService;
+import cn.group.program.service.DescribetService;
 import cn.group.program.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +30,7 @@ public class UserDataSendController {
     QuestionService questionService;
 
     @Autowired
-    DescribeService describeService;
+    DescribetService describetService;
 
     @GetMapping("/userAddGameContent")
     public String addGameContent(Model model) {
@@ -43,23 +45,23 @@ public class UserDataSendController {
             //获取所有变量
             List<String> list = Arrays.asList(request.getParameterValues("describeArray"));
             String result = request.getParameter("questionResult");
-            Describe describes;
+            Describet describest;
             Question question = new Question();
             System.out.println(result);
             question.setAnswer(result);
             Long id=questionService.save(question);
-            for(String describe : list) {
-                System.out.println(describe);
-                describes = new Describe();
-                describes.setOwn(question.getId());
-                if(describe.contains("images/")) {
-                    describes.setPhotoPath(describe);
-                    describes.setToken(null);
+            for(String describet : list) {
+                System.out.println(describet);
+                describest = new Describet();
+                describest.setOwn(question.getId());
+                if(describet.contains("images/")) {
+                    describest.setPhotoPath(describet);
+                    describest.setToken(null);
                 }else {
-                    describes.setToken(describe);
-                    describes.setPhotoPath(null);
+                    describest.setToken(describet);
+                    describest.setPhotoPath(null);
                 }
-                describeService.save(describes);
+                describetService.save(describest);
             }
             return ""+id;
         } catch (Exception e) {

@@ -116,7 +116,6 @@ public class ManyController {
     @RequestMapping(value = "/exit.ajax",method = RequestMethod.POST)
     @ResponseBody
     public Map exit(@RequestBody Map<String, String> params){
-        System.out.println("fuck");
         String username=params.get("username");
         String room=params.get("room");
         Vector<String> users=null;
@@ -132,14 +131,18 @@ public class ManyController {
         }
         if (username!=null){
             if(users.indexOf(username)==0){
+                room_question.remove(room);
                 rooms.remove(room);
-                map.put("message","房主离开了房间,房间关闭");
+                room_time.remove(room);
+                map.put("message","房主离开了房间,房间关闭,请离开房间");
             }else {
                 users.remove(username);
             }
         }
         if (users.isEmpty()){
+            room_time.remove(room);
             rooms.remove(room);
+            room_question.remove(room);
         }
         map.put("result",result);
         return map;
